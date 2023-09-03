@@ -1,0 +1,17 @@
+if TARGET_AM335X_VAR_SOM
+
+config SYS_BOARD
+	default "am335x_var_som"
+
+config SYS_VENDOR
+	default "variscite"
+
+config SYS_SOC
+	default "am33xx"
+
+config SYS_CONFIG_NAME
+	default "am335x_var_som"
+
+source "board/ti/common/Kconfig"
+
+endif

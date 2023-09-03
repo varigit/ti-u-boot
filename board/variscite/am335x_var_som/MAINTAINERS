@@ -1,0 +1,6 @@
+AM335X BOARD
+M:	Pierluigi Passaro <pierluigi.p@variscite.com>
+S:	Maintained
+F:	board/variscite/am335x_var_som/
+F:	include/configs/am335x_var_som.h
+F:	configs/am335x_var_som_defconfig

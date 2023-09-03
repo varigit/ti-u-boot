@@ -133,6 +133,36 @@ config TARGET_AM335X_SL50
 	select DM_SERIAL
 	imply CMD_DM
 
+config TARGET_AM335X_VAR_SOM
+	bool "Support am335x_var_som"
+	select BOARD_LATE_INIT
+	select DM
+	select DM_GPIO
+	select DM_SERIAL
+	imply CMD_DM
+	imply SPL_DM
+	imply SPL_DM_SEQ_ALIAS
+	imply SPL_ENV_SUPPORT
+	imply SPL_FS_EXT4
+	imply SPL_FS_FAT
+	imply SPL_GPIO_SUPPORT
+	imply SPL_I2C_SUPPORT
+	imply SPL_LIBCOMMON_SUPPORT
+	imply SPL_LIBDISK_SUPPORT
+	imply SPL_LIBGENERIC_SUPPORT
+	imply SPL_MMC_SUPPORT
+	imply SPL_NAND_SUPPORT
+	imply SPL_OF_LIBFDT
+	imply SPL_POWER_SUPPORT
+	imply SPL_SEPARATE_BSS
+	imply SPL_SERIAL_SUPPORT
+	imply SPL_SYS_MALLOC_SIMPLE
+	imply SPL_WATCHDOG_SUPPORT
+	imply SPL_YMODEM_SUPPORT
+	help
+	  This option specifies support for
+	  Variscite VAR-SOM-AM33 evaluation kit.
+
 config TARGET_BRXRE1
 	bool "Support BRXRE1"
 	select BOARD_LATE_INIT

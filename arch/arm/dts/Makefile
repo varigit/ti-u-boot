@@ -350,6 +350,7 @@ dtb-$(CONFIG_AM33XX) += \
 	am335x-sl50.dtb \
 	am335x-base0033.dtb \
 	am335x-guardian.dtb \
+	am335x-var-som.dtb \
 	am335x-wega-rdk.dtb \
 	am335x-regor-rdk.dtb
 dtb-$(CONFIG_AM43XX) += \
