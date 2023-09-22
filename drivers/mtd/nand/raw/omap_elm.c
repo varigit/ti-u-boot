@@ -114,7 +114,11 @@ int elm_check_error(u8 *syndrome, enum bch_level bch_type, u32 *error_count,
 	/* check if correctable */
 	location_status = readl(&elm_cfg->error_location[poly].location_status);
 	if (!(location_status & ELM_LOCATION_STATUS_ECC_CORRECTABLE_MASK)) {
-		printf("%s: uncorrectable ECC errors\n", DRIVER_NAME);
+		static int ecc_message_already_printed = 0;
+		if (!ecc_message_already_printed) {
+			printf("%s: uncorrectable ECC errors\n", DRIVER_NAME);
+			ecc_message_already_printed ++;
+		}
 		return -EBADMSG;
 	}
 
