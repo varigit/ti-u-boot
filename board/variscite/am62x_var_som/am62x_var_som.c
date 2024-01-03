@@ -19,6 +19,7 @@
 #include <asm/arch/hardware.h>
 #include <asm/arch/sys_proto.h>
 #include <env.h>
+#include <linux/sizes.h>
 
 #include "../common/am62x_eeprom.h"
 #include "../common/am62x_dram.h"
@@ -75,35 +76,14 @@ int dram_init_banksize(void)
 	return var_dram_init_banksize();
 }
 
-/*
- * Prevent relocation from stomping reserved memory in FDT
- */
-ulong board_get_usable_ram_top(ulong total_size)
+phys_size_t get_effective_memsize(void)
 {
-#if defined(CONFIG_SYS_SDRAM_BASE) && CONFIG_SYS_SDRAM_BASE > 0
 	/*
-	 * Detect whether we have so much RAM that it goes past the end of our
-	 * 32-bit address space. If so, clip the usable RAM so it doesn't.
+	 * Just below 512MB are TF-A and OPTEE reserve regions, thus
+	 * SPL/U-Boot RAM has to start below that. Leave 64MB space for
+	 * all reserved memories.
 	 */
-	if (gd->ram_top < CONFIG_SYS_SDRAM_BASE)
-		/*
-		 * Will wrap back to top of 32-bit space when reservations
-		 * are made.
-		 */
-		return 0;
-#endif
-
-	/* Check if gd->ram_size is 512MB or less. */
-	if (gd->ram_size <= SZ_512M) {
-		/*
-		 * Return 0x5000000 less than gd->ram_top to leave room for tfa,
-		 * op-tee, r5, etc. reserved memory nodes in the device tree from
-		 * 0x9C000000 to 0x9FFFFFFF
-		 */
-		return gd->ram_top - (0x5000000);
-	}
-
-	return gd->ram_top;
+	return gd->ram_size == SZ_512M ? SZ_512M - SZ_64M  : gd->ram_size;
 }
 
 #if defined(CONFIG_SPL_LOAD_FIT)
