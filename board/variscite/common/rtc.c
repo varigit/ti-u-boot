@@ -3,6 +3,7 @@
  * RTC setup for TI Platforms
  *
  * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
+ * Copyright (C) 2023-2024 Variscite Ltd. - https://www.variscite.com/
  */
 #include <asm/arch/hardware.h>
 #include <asm/io.h>

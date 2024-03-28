@@ -1,6 +1,6 @@
 /* SPDX-License-Identifier: GPL-2.0+
  *
- * Copyright (C) 2024 Variscite Ltd.
+ * Copyright (C) 2024 Variscite Ltd. - https://www.variscite.com/.
  *
  */
 
