@@ -14,6 +14,13 @@
 	compatible =  "ti,am625-sk", "ti,am625";
 	model = "Variscite VAR-SOM-AM62 on Symphony-Board";
 
+	backlight_lcd: backlight-lcd {
+		compatible = "gpio-backlight";
+		pinctrl-names = "default";
+		pinctrl-0 = <&lcd_backlight_pins_default>;
+		gpios = <&main_gpio1 9 GPIO_ACTIVE_HIGH>;
+		default-on;
+	};
 
 	chosen {
 		stdout-path = "serial2:115200n8";
@@ -124,6 +131,12 @@
 };
 
 &main_pmx0 {
+	lcd_backlight_pins_default: lcd-backlight-pins-default {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x19c, PIN_INPUT_PULLUP, 0) /* (B18) GPIO_1_9 */
+		>;
+	};
+
 	main_i2c0_pins_default: main-i2c0-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x1e0, PIN_INPUT_PULLUP, 0) /* (B16) I2C0_SCL */
