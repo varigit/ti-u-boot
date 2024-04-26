@@ -759,6 +759,53 @@ static int dss_init_am65x_oldi_io_ctrl(struct udevice *dev,
 	return 0;
 }
 
+static enum dss_oldi_modes dss_am65x_parse_oldi_properties(struct udevice *dev)
+{
+	ofnode ports;
+	enum dss_oldi_modes oldi_mode;
+	bool oldi0_port_valid, oldi1_port_valid;
+
+	ports = ofnode_find_subnode(dev_ofnode(dev), "ports");
+
+	/*
+	 * For dual-link connections, the OLDI ports are expected
+	 * at port reg = 0 and 2, while for single-link cases the OLDI port is
+	 * expected only at port reg = 0.
+	 */
+	oldi0_port_valid = ofnode_valid(ofnode_find_subnode(ports, "port@0"));
+	oldi1_port_valid = ofnode_valid(ofnode_find_subnode(ports, "port@2"));
+
+	if (!(oldi0_port_valid || oldi1_port_valid)) {
+		/* Keep OLDI TXes OFF if neither OLDI port is present. */
+		oldi_mode = OLDI_MODE_OFF;
+	} else if (oldi0_port_valid && !oldi1_port_valid) {
+		/*
+		 * OLDI0 port found, but not OLDI1 port. Setting single
+		 * link output mode.
+		 */
+		oldi_mode = OLDI_SINGLE_LINK_SINGLE_MODE;
+	} else if (!oldi0_port_valid && oldi1_port_valid) {
+		/*
+		 * The 2nd OLDI TX cannot be operated alone. This use case is
+		 * not supported in the HW. Since the pins for OLDIs 0 and 1 are
+		 * separate, one could theoretically set a clone mode over OLDIs
+		 * 0 and 1 and just simply not use the OLDI 0. This is a hacky
+		 * way to enable only OLDI TX 1 and hence is not officially
+		 * supported.
+		 */
+		oldi_mode = OLDI_MODE_OFF;
+		dev_err(dev, "OLDI dt configuration not supported!\n");
+	} else {
+		/*
+		 * OLDI Ports found for both the OLDI TXes. The DSS is to be
+		 * configured in Dual Link.
+		 */
+		oldi_mode = OLDI_DUAL_LINK;
+	}
+
+	return oldi_mode;
+}
+
 static int tidss_drv_probe(struct udevice *dev)
 {
 	struct video_uc_plat *uc_plat = dev_get_uclass_plat(dev);
@@ -863,7 +910,7 @@ static int tidss_drv_probe(struct udevice *dev)
 	uc_priv->xsize = timings.hactive.typ;
 	uc_priv->ysize = timings.vactive.typ;
 	if (priv->feat->subrev == DSS_AM65X || priv->feat->subrev == DSS_AM625) {
-		priv->oldi_mode = OLDI_DUAL_LINK;
+		priv->oldi_mode = dss_am65x_parse_oldi_properties(dev);
 		if (priv->oldi_mode) {
 			ret = dss_init_am65x_oldi_io_ctrl(dev, priv);
 			if (ret)
