@@ -12,4 +12,5 @@ obj-y += ../common/am62x_dram.o
 ifndef CONFIG_CPU_V7R
 obj-y += ../common/am62x_mmc.o
 endif
+obj-$(CONFIG_VIDEO) += ../common/video.o
 obj-$(CONFIG_TI_AM65_CPSW_NUSS) += ../common/am62x_eth.o
