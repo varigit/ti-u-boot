@@ -15,6 +15,7 @@
 #define CFG_SYS_SDRAM_BASE1             0x880000000
 
 #define DEFAULT_SDRAM_SIZE              SZ_512M
+#define CFG_MAX_MEM_MAPPED              0x80000000
 
 /* Now for the remaining common defines */
 #include <configs/ti_armv7_common.h>

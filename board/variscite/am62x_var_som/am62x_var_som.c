@@ -78,12 +78,25 @@ int dram_init_banksize(void)
 
 phys_size_t get_effective_memsize(void)
 {
+	phys_size_t ram_size;;
+
 	/*
 	 * Just below 512MB are TF-A and OPTEE reserve regions, thus
 	 * SPL/U-Boot RAM has to start below that. Leave 64MB space for
 	 * all reserved memories.
 	 */
-	return gd->ram_size == SZ_512M ? SZ_512M - SZ_64M  : gd->ram_size;
+	if (gd->ram_size == SZ_512M)
+		ram_size = SZ_512M - SZ_64M;
+	else
+		ram_size = gd->ram_size;
+
+#ifndef CFG_MAX_MEM_MAPPED
+	return ram_size;
+#else
+	/* limit stack to what we can reasonable map */
+	return ((ram_size > CFG_MAX_MEM_MAPPED) ?
+		CFG_MAX_MEM_MAPPED : ram_size);
+#endif
 }
 
 #if defined(CONFIG_SPL_LOAD_FIT)
