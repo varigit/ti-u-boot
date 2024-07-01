@@ -22,6 +22,7 @@ config TARGET_AM62X_VAR_SOM_R5
 	select RAM
 	select SPL_RAM
 	select K3_DDRSS
+	select K3_DDRSS_BOARD_ADJUST
 	select BINMAN
 	imply SYS_K3_SPL_ATF
 
