@@ -268,12 +268,12 @@ static u16 wait_for_event(void __iomem *i2c_base, int ip_rev, int waitdelay)
 		    I2C_STAT_AL)) && timeout--);
 
 	if (timeout <= 0) {
-		printf("Timed out in %s: status=%04x\n", __func__, status);
+		debug("Timed out in %s: status=%04x\n", __func__, status);
 		/*
 		 * If status is still 0 here, probably the bus pads have
 		 * not been configured for I2C, and/or pull-ups are missing.
 		 */
-		printf("Check if pads/pull-ups of bus are properly configured\n");
+		debug("Check if pads/pull-ups of bus are properly configured\n");
 		omap_i2c_write_reg(i2c_base, ip_rev, 0xFFFF, OMAP_I2C_STAT_REG);
 		status = 0;
 	}
@@ -709,7 +709,7 @@ static int __omap24_i2c_write(void __iomem *i2c_base, int ip_rev, int waitdelay,
 	int i;
 	u16 status;
 	int i2c_error = 0;
-	int timeout = I2C_TIMEOUT;
+	int timeout = 100;
 
 	if (alen < 0) {
 		puts("I2C write: addr len < 0\n");
@@ -824,9 +824,15 @@ static int __omap24_i2c_write(void __iomem *i2c_base, int ip_rev, int waitdelay,
 	 * poll ARDY bit for making sure that last byte really has been
 	 * transferred on the bus.
 	 */
+	printf("\n%s: waiting for I2C check...", __func__);
+
 	do {
+		printf(".");
+
 		status = wait_for_event(i2c_base, ip_rev, waitdelay);
 	} while (!(status & I2C_STAT_ARDY) && timeout--);
+	printf("\n");
+
 	if (timeout <= 0)
 		printf("i2c_write: timed out writig last byte!\n");
 
