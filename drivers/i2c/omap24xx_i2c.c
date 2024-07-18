@@ -824,17 +824,20 @@ static int __omap24_i2c_write(void __iomem *i2c_base, int ip_rev, int waitdelay,
 	 * poll ARDY bit for making sure that last byte really has been
 	 * transferred on the bus.
 	 */
-	printf("\n%s: waiting for I2C check...", __func__);
 
-	do {
-		printf(".");
+	status = wait_for_event(i2c_base, ip_rev, waitdelay);
 
-		status = wait_for_event(i2c_base, ip_rev, waitdelay);
-	} while (!(status & I2C_STAT_ARDY) && timeout--);
-	printf("\n");
+	if (!status) {
+		printf("\n%s: waiting for I2C check...", __func__);
+		while (!(status & I2C_STAT_ARDY) && timeout--) {
+			printf(".");
+			status = wait_for_event(i2c_base, ip_rev, waitdelay);
+		}
 
-	if (timeout <= 0)
-		printf("i2c_write: timed out writig last byte!\n");
+		printf("\n");
+		if (timeout <= 0)
+			printf("i2c_write: timed out writig last byte!\n");
+	}
 
 wr_exit:
 	flush_fifo(i2c_base, ip_rev);
