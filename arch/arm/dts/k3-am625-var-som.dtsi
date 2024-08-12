@@ -102,13 +102,15 @@
 
 &cpsw3g {
 	pinctrl-names = "default";
-	pinctrl-0 = <&main_mdio1_pins_default
-		     &main_rgmii1_pins_default
+	pinctrl-0 = <&main_rgmii1_pins_default
 		     &main_rgmii2_pins_default>;
 };
 
 &cpsw3g_mdio {
 	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&main_mdio1_pins_default>;
+
 	cpsw3g_phy0: ethernet-phy@4 {
 		reg = <4>;
 	};
