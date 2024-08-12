@@ -27,13 +27,6 @@
 		bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x02800000";
 	};
 
-	extcon_usb0: extcon-usb0 {
-		compatible = "linux,extcon-usb-gpio";
-		id-gpios = <&main_gpio1 12 GPIO_ACTIVE_HIGH>;
-		pinctrl-names = "default";
-		pinctrl-0 = <&extcon_usb0_gpio_id_pins_default>;
-	};
-
 	panel_lvds: panel-lvds {
 		bootph-pre-ram;
 		compatible = "simple-panel";
@@ -247,12 +240,6 @@
 		>;
 	};
 
-	extcon_usb0_gpio_id_pins_default: extcon-usb0-gpio-id-pins-default {
-		pinctrl-single,pins = <
-			AM62X_IOPAD(0x01a8, PIN_INPUT, 7) /* (D20) MCASP0_AFSX.GPIO1_12 */
-		>;
-	};
-
 	main_usb1_pins_default: main-usb1-pins-default {
 		pinctrl-single,pins = <
 			AM62X_IOPAD(0x0258, PIN_OUTPUT, 0) /* (F18) USB1_DRVVBUS */
@@ -303,7 +290,7 @@
 };
 
 &usb0 {
-	extcon = <&extcon_usb0>;
+	dr_mode = "peripheral";
 };
 
 &usb1 {
