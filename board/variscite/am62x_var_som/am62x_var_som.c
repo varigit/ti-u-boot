@@ -23,7 +23,7 @@
 
 #include "../common/am62x_eeprom.h"
 #include "../common/am62x_dram.h"
-#include "../common/rtc.c"
+#include "../common/rtc.h"
 #ifdef CONFIG_BOARD_LATE_INIT
 #include "../common/am62x_mmc.h"
 #endif
