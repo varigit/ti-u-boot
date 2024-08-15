@@ -15,3 +15,4 @@ endif
 obj-$(CONFIG_VIDEO) += ../common/video.o
 obj-$(CONFIG_TI_AM65_CPSW_NUSS) += ../common/am62x_eth.o
 obj-${CONFIG_ARCH_K3} += ../common/k3-ddr-init.o
+obj-${CONFIG_BOARD_HAS_32K_RTC_CRYSTAL} += ../common/rtc.o
