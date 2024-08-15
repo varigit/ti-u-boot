@@ -14,3 +14,4 @@ obj-y += ../common/am62x_mmc.o
 endif
 obj-$(CONFIG_VIDEO) += ../common/video.o
 obj-$(CONFIG_TI_AM65_CPSW_NUSS) += ../common/am62x_eth.o
+obj-${CONFIG_ARCH_K3} += ../common/k3-ddr-init.o

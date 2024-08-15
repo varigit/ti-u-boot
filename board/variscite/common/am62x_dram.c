@@ -87,7 +87,11 @@ int var_dram_init_banksize(void) {
 
 	if (ret) {
 		printf("%s: Error: could not get dram size from eeprom, reverting to device tree\n", __func__);
-		return fdtdec_setup_memory_banksize();
+		ret = fdtdec_setup_memory_banksize();
+		if (ret)
+			printf("Error setting up memory banksize from device tree. %d\n", ret);
+
+		return ret;
 	}
 
 	remaining_size = dram_size;

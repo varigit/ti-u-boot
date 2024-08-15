@@ -28,6 +28,8 @@
 #include "../common/am62x_mmc.h"
 #endif
 
+#include "../common/k3-ddr-init.h"
+
 int var_setup_mac(struct var_eeprom *eeprom);
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -55,25 +57,6 @@ int read_eeprom_header(void) {
 	}
 
 	return ret;
-}
-
-int dram_init(void)
-{
-	int ret;
-	read_eeprom_header();
-
-	ret = fdtdec_setup_mem_size_base();
-
-	/* Override fdtdec_setup_mem_size_base with memory size from EEPROM */
-	if (!ret)
-		ret = var_dram_init_mem_size_base();
-
-	return ret;
-}
-
-int dram_init_banksize(void)
-{
-	return var_dram_init_banksize();
 }
 
 phys_size_t get_effective_memsize(void)
@@ -107,53 +90,12 @@ int board_fit_config_name_match(const char *name)
 #endif
 
 #if defined(CONFIG_SPL_BUILD)
-#if defined(CONFIG_K3_AM64_DDRSS)
-static void fixup_ddr_driver_for_ecc(struct spl_image_info *spl_image)
-{
-	struct udevice *dev;
-	int ret;
-
-	dram_init_banksize();
-
-	ret = uclass_get_device(UCLASS_RAM, 0, &dev);
-	if (ret)
-		panic("Cannot get RAM device for ddr size fixup: %d\n", ret);
-
-	ret = k3_ddrss_ddr_fdt_fixup(dev, spl_image->fdt_addr, gd->bd);
-	if (ret)
-		printf("Error fixing up ddr node for ECC use! %d\n", ret);
-}
-#else
-static void fixup_memory_node(struct spl_image_info *spl_image)
-{
-	u64 start[CONFIG_NR_DRAM_BANKS];
-	u64 size[CONFIG_NR_DRAM_BANKS];
-	int bank;
-	int ret;
-
-	dram_init();
-	dram_init_banksize();
-
-	for (bank = 0; bank < CONFIG_NR_DRAM_BANKS; bank++) {
-		start[bank] =  gd->bd->bi_dram[bank].start;
-		size[bank] = gd->bd->bi_dram[bank].size;
-	}
-
-	/* dram_init functions use SPL fdt, and we must fixup u-boot fdt */
-	ret = fdt_fixup_memory_banks(spl_image->fdt_addr,
-				     start, size, CONFIG_NR_DRAM_BANKS);
-	if (ret)
-		printf("Error fixing up memory node! %d\n", ret);
-}
-#endif
-
 void spl_perform_fixups(struct spl_image_info *spl_image)
 {
-#if defined(CONFIG_K3_AM64_DDRSS)
-	fixup_ddr_driver_for_ecc(spl_image);
-#else
-	fixup_memory_node(spl_image);
-#endif
+	if (IS_ENABLED(CONFIG_K3_INLINE_ECC))
+		fixup_ddr_driver_for_ecc(spl_image);
+	else
+		fixup_memory_node(spl_image);
 }
 #endif
 
