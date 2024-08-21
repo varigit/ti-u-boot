@@ -195,7 +195,7 @@ int ft_board_setup(void *blob, struct bd_info *bd)
 {
 	int ret = -1;
 
-	if (IS_ENABLED(CONFIG_VIDEO)) {
+	if (CONFIG_IS_ENABLED(VIDEO)) {
 		if (IS_ENABLED(CONFIG_FDT_SIMPLEFB))
 			ret = fdt_simplefb_enable_and_mem_rsv(blob);
 
