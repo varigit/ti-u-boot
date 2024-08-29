@@ -7,14 +7,14 @@
 #include "k3-am625-var-som-symphony-binman.dtsi"
 
 / {
-	chosen {
-		stdout-path = "serial2:115200n8";
-		tick-timer = &timer1;
-	};
-
 	aliases {
 		mmc0 = &sdhci0;
 		mmc1 = &sdhci1;
+	};
+
+	chosen {
+		stdout-path = "serial2:115200n8";
+		tick-timer = &timer1;
 	};
 
 	memory@80000000 {
@@ -31,54 +31,6 @@
 	};
 };
 
-&dmss {
-	bootph-pre-ram;
-};
-
-&secure_proxy_main {
-	bootph-pre-ram;
-};
-
-&dmsc {
-	bootph-pre-ram;
-};
-
-&k3_pds {
-	bootph-pre-ram;
-};
-
-&k3_clks {
-	bootph-pre-ram;
-};
-
-&k3_reset {
-	bootph-pre-ram;
-};
-
-&wkup_conf {
-	bootph-pre-ram;
-};
-
-&chipid {
-	bootph-pre-ram;
-};
-
-&main_pmx0 {
-	bootph-pre-ram;
-};
-
-&main_uart0 {
-	bootph-pre-ram;
-};
-
-&main_uart0_pins_default {
-	bootph-pre-ram;
-};
-
-&main_uart1 {
-	bootph-pre-ram;
-};
-
 &cbass_mcu {
 	bootph-pre-ram;
 };
@@ -87,11 +39,79 @@
 	bootph-pre-ram;
 };
 
-&mcu_pmx0 {
+&chipid {
 	bootph-pre-ram;
 };
 
-&wkup_uart0 {
+&cpsw3g {
+	/delete-property/ ranges;
+	/* This is WA because MDIO driver is not DM enabled */
+	bootph-pre-ram;
+
+	cpsw-phy-sel@04044 {
+		compatible = "ti,am64-phy-gmii-sel";
+		reg = <0x0 0x00104044 0x0 0x8>;
+		bootph-pre-ram;
+	};
+};
+
+&cpsw3g_phy0 {
+	bootph-pre-ram;
+};
+
+&cpsw_port1 {
+	/* Variscite MAC addresses assigned by EEPROM/env */
+	/delete-property/ ti,syscon-efuse;
+	bootph-pre-ram;
+};
+
+&cpsw_port2 {
+	bootph-pre-ram;
+};
+
+&dmsc {
+	bootph-pre-ram;
+	k3_sysreset: sysreset-controller {
+		compatible = "ti,sci-sysreset";
+		bootph-pre-ram;
+	};
+};
+
+&dmss {
+	bootph-pre-ram;
+};
+
+&fss {
+	bootph-pre-ram;
+};
+
+&k3_clks {
+	bootph-pre-ram;
+};
+
+&k3_pds {
+	bootph-pre-ram;
+};
+
+&k3_reset {
+	bootph-pre-ram;
+};
+
+&main_bcdma {
+	bootph-pre-ram;
+	reg = <0x00 0x485c0100 0x00 0x100>,
+	      <0x00 0x4c000000 0x00 0x20000>,
+	      <0x00 0x4a820000 0x00 0x20000>,
+	      <0x00 0x4aa40000 0x00 0x20000>,
+	      <0x00 0x4bc00000 0x00 0x100000>,
+	      <0x00 0x48600000 0x00 0x8000>,
+	      <0x00 0x484a4000 0x00 0x2000>,
+	      <0x00 0x484c2000 0x00 0x2000>;
+	reg-names = "gcfg", "bchanrt", "rchanrt", "tchanrt",
+		    "ringrt" , "cfg", "tchan", "rchan";
+};
+
+&main_gpio0 {
 	bootph-pre-ram;
 };
 
@@ -128,69 +148,12 @@
 	bootph-pre-ram;
 };
 
-&sdhci0 {
-	bootph-pre-ram;
-};
-
-&sdhci1 {
+&main_mdio1_pins_default {
 	bootph-pre-ram;
 };
 
 &main_mmc1_pins_default {
 	bootph-pre-ram;
-};
-
-&usbss0 {
-	bootph-pre-ram;
-};
-
-&usb0 {
-	dr_mode = "peripheral";
-	/* Since role switching is not supported in U-Boot */
-	/delete-property/ extcon;
-	bootph-pre-ram;
-};
-
-&usbss1 {
-	bootph-pre-ram;
-};
-
-&usb1 {
-	bootph-pre-ram;
-};
-
-&main_usb1_pins_default {
-	bootph-pre-ram;
-};
-
-&cpsw3g {
-	/delete-property/ ranges;
-	/* This is WA because MDIO driver is not DM enabled */
-	bootph-pre-ram;
-
-	cpsw-phy-sel@04044 {
-		compatible = "ti,am64-phy-gmii-sel";
-		reg = <0x0 0x00104044 0x0 0x8>;
-		bootph-pre-ram;
-	};
-};
-
-&cpsw_port2 {
-	bootph-pre-ram;
-};
-
-&main_bcdma {
-	bootph-pre-ram;
-	reg = <0x00 0x485c0100 0x00 0x100>,
-	      <0x00 0x4c000000 0x00 0x20000>,
-	      <0x00 0x4a820000 0x00 0x20000>,
-	      <0x00 0x4aa40000 0x00 0x20000>,
-	      <0x00 0x4bc00000 0x00 0x100000>,
-	      <0x00 0x48600000 0x00 0x8000>,
-	      <0x00 0x484a4000 0x00 0x2000>,
-	      <0x00 0x484c2000 0x00 0x2000>;
-	reg-names = "gcfg", "bchanrt", "rchanrt", "tchanrt",
-		    "ringrt" , "cfg", "tchan", "rchan";
 };
 
 &main_pktdma {
@@ -207,13 +170,7 @@
 		    "cfg", "tchan", "rchan", "rflow";
 };
 
-&fss {
-	bootph-pre-ram;
-};
-
-&cpsw_port1 {
-	/* Variscite MAC addresses assigned by EEPROM/env */
-	/delete-property/ ti,syscon-efuse;
+&main_pmx0 {
 	bootph-pre-ram;
 };
 
@@ -221,35 +178,23 @@
 	bootph-pre-ram;
 };
 
-&main_mdio1_pins_default {
+&main_uart0 {
 	bootph-pre-ram;
 };
 
-&cpsw3g_phy0 {
+&main_uart0_pins_default {
 	bootph-pre-ram;
 };
 
-&dmsc {
-	bootph-pre-ram;
-	k3_sysreset: sysreset-controller {
-		compatible = "ti,sci-sysreset";
-		bootph-pre-ram;
-	};
-};
-
-&main_gpio0 {
+&main_uart1 {
 	bootph-pre-ram;
 };
 
-&main_i2c1 {
+&main_usb1_pins_default {
 	bootph-pre-ram;
 };
 
-&main_i2c1_pins_default {
-	bootph-pre-ram;
-};
-
-&vdd_mmc1 {
+&mcu_pmx0 {
 	bootph-pre-ram;
 };
 
@@ -269,10 +214,53 @@
 	};
 };
 
+&sdhci0 {
+	bootph-pre-ram;
+};
+
+&sdhci1 {
+	bootph-pre-ram;
+};
+
+&secure_proxy_main {
+	bootph-pre-ram;
+};
+
+&usb0 {
+	dr_mode = "peripheral";
+	/* Since role switching is not supported in U-Boot */
+	/delete-property/ extcon;
+	bootph-pre-ram;
+};
+
+&usb1 {
+	bootph-pre-ram;
+};
+
+&usbss0 {
+	bootph-pre-ram;
+};
+
+&usbss1 {
+	bootph-pre-ram;
+};
+
+&vdd_mmc1 {
+	bootph-pre-ram;
+};
+
 &vdd_sd_dv {
 	bootph-pre-ram;
 };
 
 &vdd_sd_dv_pins_default {
+	bootph-pre-ram;
+};
+
+&wkup_conf {
+	bootph-pre-ram;
+};
+
+&wkup_uart0 {
 	bootph-pre-ram;
 };
