@@ -133,21 +133,21 @@
 
 		usb3_sel_hog {
 			gpio-hog;
-			gpios = <4 0>;
+			gpios = <4 GPIO_ACTIVE_HIGH>;
 			output-low;
 			line-name = "usb3_sel";
 		};
 
 		eth_som_vselect_hog {
 			gpio-hog;
-			gpios = <6 0>;
+			gpios = <6 GPIO_ACTIVE_HIGH>;
 			output-low;
 			line-name = "eth-vselect";
 		};
 
 		eth_mdio_enable_hog {
 			gpio-hog;
-			gpios = <7 0>;
+			gpios = <7 GPIO_ACTIVE_HIGH>;
 			output-high;
 			line-name = "eth-mdio-enable";
 		};
