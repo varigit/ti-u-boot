@@ -191,6 +191,11 @@ int board_late_init(void)
 			(int) (gd->ram_size / 1024 / 1024));
 	env_set("sdram_size", sdram_size_str);
 
+	/* Set fdt blob relocation upper limit less than 0x90000000
+	 * (start address + bootm_size) to maintain the contiguous memory
+	 * region for the CMA to allocate for a machine with 512 MiB DRAM */
+	env_set("fdt_high", "0x8e000000");
+
 #ifdef CONFIG_ENV_IS_IN_MMC
 	board_late_mmc_env_init();
 #endif
