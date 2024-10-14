@@ -20,7 +20,10 @@
 #include <asm/arch/hardware.h>
 #include <asm/arch/sys_proto.h>
 #include <env.h>
+#include <efi_loader.h>
+#include <init.h>
 #include <linux/sizes.h>
+#include <mapmem.h>
 
 #include "../common/am62x_eeprom.h"
 #include "../common/am62x_dram.h"
@@ -31,6 +34,7 @@
 
 #include "../common/k3-ddr-init.h"
 
+#define RESERVED_MEMORY SZ_64M
 int var_setup_mac(struct var_eeprom *eeprom);
 
 DECLARE_GLOBAL_DATA_PTR;
@@ -70,7 +74,7 @@ phys_size_t get_effective_memsize(void)
 	 * all reserved memories.
 	 */
 	if (gd->ram_size == SZ_512M)
-		ram_size = SZ_512M - SZ_64M;
+		ram_size = SZ_512M - RESERVED_MEMORY;
 	else
 		ram_size = gd->ram_size;
 
@@ -82,6 +86,39 @@ phys_size_t get_effective_memsize(void)
 		CFG_MAX_MEM_MAPPED : ram_size);
 #endif
 }
+
+#ifdef CONFIG_EFI_LOADER
+void efi_add_known_memory(void)
+{
+	u64 ram_end, ram_start;
+	u64 ram_top = board_get_usable_ram_top(0) & ~EFI_PAGE_MASK;
+	int i;
+
+	/*
+	 * ram_top is just outside mapped memory. So use an offset of one for
+	 * mapping the sandbox address.
+	 */
+	ram_top = (uintptr_t)map_sysmem(ram_top - 1, 0) + 1;
+
+	/* Fix for 32bit targets with ram_top at 4G */
+	if (!ram_top)
+		ram_top = 0x100000000ULL;
+
+	/* Add RAM */
+	for (i = 0; i < CONFIG_NR_DRAM_BANKS; i++) {
+		if (gd->bd->bi_dram[i].size) {
+			ram_start = (uintptr_t)map_sysmem(gd->bd->bi_dram[i].start, 0);
+			if (gd->ram_size == SZ_512M)
+				/* Exclude RESERVED_MEMORY from EFI subsystem memory reservations */
+				ram_end = ram_start + gd->bd->bi_dram[i].size - RESERVED_MEMORY;
+			else
+				ram_end = ram_start + gd->bd->bi_dram[i].size;
+
+			efi_add_conventional_memory_map(ram_start, ram_end, ram_top);
+		}
+	}
+}
+#endif
 
 #if defined(CONFIG_SPL_LOAD_FIT)
 int board_fit_config_name_match(const char *name)
