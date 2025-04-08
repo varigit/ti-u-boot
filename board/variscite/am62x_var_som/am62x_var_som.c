@@ -24,9 +24,11 @@
 #include <init.h>
 #include <linux/sizes.h>
 #include <mapmem.h>
+#include <cpu_func.h>
 
 #include "../common/am62x_eeprom.h"
 #include "../common/am62x_dram.h"
+#include "../common/am62x_eth.h"
 #include "../common/rtc.h"
 #ifdef CONFIG_BOARD_LATE_INIT
 #include "../common/am62x_mmc.h"

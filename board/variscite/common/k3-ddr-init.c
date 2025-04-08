@@ -10,6 +10,8 @@
 #include <spl.h>
 
 #include "k3-ddr-init.h"
+#include "am62x_eeprom.h"
+#include "am62x_dram.h"
 
 int dram_init(void)
 {

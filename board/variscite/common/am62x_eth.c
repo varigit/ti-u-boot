@@ -7,8 +7,8 @@
 #include <net.h>
 #include <miiphy.h>
 #include <env.h>
+#include <cpu_func.h>
 #include "am62x_eth.h"
-
 
 #define CHAR_BIT 8
 
