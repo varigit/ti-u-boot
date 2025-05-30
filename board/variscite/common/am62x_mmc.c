@@ -2,7 +2,7 @@
 /*
  * Copyright 2023-2025 Variscite Ltd. - https://www.variscite.com/
  */
-#include <common.h>
+
 #include <command.h>
 #include <linux/errno.h>
 #include <asm/io.h>
