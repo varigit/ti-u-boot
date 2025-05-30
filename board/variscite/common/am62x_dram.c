@@ -3,11 +3,11 @@
  * Copyright 2023-2025 Variscite Ltd. - https://www.variscite.com/
  */
 
-#include <common.h>
 #include <asm/global_data.h>
 #include <fdt_support.h>
 #include <asm/io.h>
 #include <log.h>
+#include <errno.h>
 #include "am62x_eeprom.h"
 
 DECLARE_GLOBAL_DATA_PTR;

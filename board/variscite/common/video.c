@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2016 Freescale Semiconductor, Inc.
  * Copyright 2018 NXP
+ * Copyright 2023-2025 Variscite Ltd. - https://www.variscite.com/
  *
  * SPDX-License-Identifier:	GPL-2.0+
  */
 
-#include <common.h>
+#include <vsprintf.h>
 #include <splash.h>
 #include <mmc.h>
 #include <env.h>
