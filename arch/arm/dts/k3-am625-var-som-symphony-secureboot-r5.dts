@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * VAR-SOM-AM62 dts file for R5 SPL
+ * Copyright (C) 2021-2022 Texas Instruments Incorporated - https://www.ti.com/
+ * Copyright (C) 2023-2025 Variscite Ltd. - https://www.variscite.com/
+ */
+
+#include "k3-am625-var-som-r5-common.dtsi"
+
+#ifdef CONFIG_TARGET_AM62X_VAR_SOM_R5
+#include "var-som-hs-se-binman.dtsi"
+
+&hs_se_bin {
+	filename = "tiboot3-am62x-hs-am62x-var-som-secureboot.bin";
+};
+
+&hs_fs_bin {
+	filename = "tiboot3-am62x-hs-fs-am62x-var-som-secureboot.bin";
+};
+
+&gp_bin {
+	filename = "tiboot3-am62x-gp-am62x-var-som-secureboot.bin";
+};
+#endif
+
