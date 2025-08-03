@@ -7,5 +7,13 @@
 
 #include "k3-am62p5-r5-var-som-common.dtsi"
 #ifdef CONFIG_TARGET_AM62P5_R5_VAR_SOM
-#include "var-som-hs-fs-binman.dtsi"
+#include "var-som-hs-se-binman.dtsi"
 #endif
+
+&hs_se_bin {
+	filename = "tiboot3-am62px-hs-am62px-var-som-secureboot.bin";
+};
+
+&hs_fs_bin {
+	filename = "tiboot3-am62px-hs-fs-am62px-var-som-secureboot.bin";
+};
