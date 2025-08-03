@@ -9,7 +9,9 @@ jobs:
     with:
       defconfig: >-
         arm:am62px_var_som_a53_defconfig
+        arm:am62px_var_som_a53_secureboot_prep_defconfig
         arm:am62px_var_som_r5_defconfig
+        arm:am62px_var_som_r5_secureboot_prep_defconfig
         arm:am62px_var_som_r5_usbdfu_defconfig
         arm:am62x_var_som_a53_defconfig
         arm:am62x_var_som_a53_secureboot_prep_defconfig
