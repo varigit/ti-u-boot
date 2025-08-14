@@ -58,17 +58,6 @@
 			no-map;
 		};
 	};
-
-	vdd_phy_3v3: regulator-phy-vdd {
-		pinctrl-names = "default";
-		pinctrl-0 = <&phy0_pwr_en_pins_default>;
-		compatible = "regulator-fixed";
-		regulator-name = "vdd_phy_3v3";
-		gpio = <&main_gpio0 45 GPIO_ACTIVE_HIGH>;
-		enable-active-high;
-		regulator-always-on;
-		status="okay";
-	};
 };
 
 &cpsw3g {
@@ -84,16 +73,16 @@
 
 	cpsw3g_phy0: ethernet-phy@4 {
 		reg = <4>;
+		compatible = "ethernet-phy-ieee802.3-c22";
+		bootph-all;
+		ti,min-output-impedance;
+		enet-phy-lane-no-swap;
+		reset-assert-us = <10000>;
+		reset-deassert-us = <100000>;
 	};
 };
 
 &cpsw_port1 {
-	pinctrl-names = "default";
-	pinctrl-0 = <&phy0_reset_pins_default>;
-	phy-supply = <&vdd_phy_3v3>;
-	phy-reset-gpios = <&main_gpio0 46 GPIO_ACTIVE_LOW>;
-	phy-reset-duration = <10>;
-	phy-reset-post-delay = <100>;
 	phy-mode = "rgmii";
 	phy-handle = <&cpsw3g_phy0>;
 	status = "okay";
@@ -163,6 +152,7 @@
 			AM62PX_IOPAD(0x0140, PIN_INPUT, 0) /* (C16) RGMII1_TD3 */
 			AM62PX_IOPAD(0x0130, PIN_INPUT, 0) /* (B17) RGMII1_TXC */
 			AM62PX_IOPAD(0x012c, PIN_INPUT, 0) /* (B18) RGMII1_TX_CTL */
+			AM62PX_IOPAD(0x00bc, PIN_INPUT, 7) /* (U8)  GPIO0_46 */
 		>;
 		bootph-all;
 	};
@@ -183,18 +173,6 @@
 			AM62PX_IOPAD(0x0164, PIN_INPUT, 0) /* (A20) RGMII2_TX_CTL */
 		>;
 		bootph-all;
-	};
-
-	phy0_pwr_en_pins_default: phy0-pwr-en-default-pins {
-		pinctrl-single,pins = <
-			AM62PX_IOPAD(0x00B8, PIN_INPUT, 7) /* (AE24) VOUT0_DATA0.GPIO0_45 */
-		>;
-	};
-
-	phy0_reset_pins_default: phy0-reset-default-pins {
-		pinctrl-single,pins = <
-			AM62PX_IOPAD(0x00BC, PIN_INPUT, 7) /* (W23) VOUT0_DATA1.GPIO0_46 */
-		>;
 	};
 };
 
