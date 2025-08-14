@@ -43,6 +43,20 @@
 	};
 };
 
+&main_gpio0 {
+	status = "okay";
+	u-boot,dm-pre-reloc;
+
+	int_eth_phy_vdd_hog {
+		gpio-hog;
+		pinctrl-names = "default";
+		pinctrl-0 = <&int_eth_phy_vdd_pins>;
+		gpios = <46 GPIO_ACTIVE_HIGH>;
+		output-low;
+		u-boot,dm-pre-reloc;
+	};
+};
+
 &dmsc {
 	mboxes= <&secure_proxy_main 0>,
 		<&secure_proxy_main 1>,
@@ -84,4 +98,13 @@
 &memorycontroller {
 	ti,canuart-wake = <&canuart_wake>;
 	ti,ddr-pmctrl = <&ddr_pmctrl>;
+};
+
+&main_pmx0 {
+	int_eth_phy_vdd_pins: int-eth-vdd-pins {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x00bc, PIN_OUTPUT, 7) /* (V24) VOUT0_DATA1.GPIO0_46 */
+		>;
+		bootph-all;
+	};
 };
