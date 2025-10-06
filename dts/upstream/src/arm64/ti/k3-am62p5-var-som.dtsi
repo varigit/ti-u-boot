@@ -226,7 +226,7 @@
 
 	phy0_pwr_en_pins_default: phy0-pwr-en-default-pins {
 		pinctrl-single,pins = <
-			AM62PX_IOPAD(0x00BC, PIN_OUTPUT, 7) /* (W23) VOUT0_DATA1.GPIO0_46 */
+			AM62PX_IOPAD(0x00BC, PIN_INPUT, 7) /* (W23) VOUT0_DATA1.GPIO0_46 */
 		>;
 	};
 };
