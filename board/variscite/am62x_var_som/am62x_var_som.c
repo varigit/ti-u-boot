@@ -4,7 +4,7 @@
  *
  * Copyright (C) 2020-2022 Texas Instruments Incorporated - https://www.ti.com/
  *	Suman Anna <s-anna@ti.com>
- * Copyright (C) 2023-2024 Variscite Ltd. - https://www.variscite.com/
+ * Copyright (C) 2023-2025 Variscite Ltd. - https://www.variscite.com/
  *
  */
 
@@ -198,11 +198,6 @@ int board_late_init(void)
 	snprintf(sdram_size_str, SDRAM_SIZE_STR_LEN, "%d",
 			(int) (gd->ram_size / 1024 / 1024));
 	env_set("sdram_size", sdram_size_str);
-
-	/* Set fdt blob relocation upper limit less than 0x90000000
-	 * (start address + bootm_size) to maintain the contiguous memory
-	 * region for the CMA to allocate for a machine with 512 MiB DRAM */
-	env_set("fdt_high", "0x8e000000");
 
 #ifdef CONFIG_ENV_IS_IN_MMC
 	board_late_mmc_env_init();
