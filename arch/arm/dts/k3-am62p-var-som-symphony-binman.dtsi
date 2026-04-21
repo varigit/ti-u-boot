@@ -9,8 +9,8 @@
 #if IS_ENABLED(CONFIG_TARGET_AM62P5_R5_VAR_SOM)
 
 &binman {
-	hs_fs_bin: tiboot3-am62px-hs-fs-var-som.bin {
-		filename = "tiboot3-am62px-hs-fs-am62px-var-som.bin";
+	hs_fs_bin: tiboot3-am62px-var-som-hs-fs-evm.bin {
+		filename = "tiboot3-am62px-var-som-hs-fs-evm.bin";
 
 		ti-secure-rom {
 			content = <&u_boot_spl_fs>, <&ti_fs_enc_fs>, <&combined_tifs_cfg_fs>,
@@ -58,8 +58,8 @@
 		};
 	};
 
-	hs_se_bin: tiboot3-am62px-hs-var-som.bin {
-		filename = "tiboot3-am62px-hs-var-som.bin";
+	hs_se_bin: tiboot3-am62px-var-som-hs-evm.bin {
+		filename = "tiboot3-am62px-var-som-hs-evm.bin";
 
 		ti-secure-rom {
 			content = <&u_boot_spl_hs>, <&ti_fs_enc_hs>, <&combined_tifs_cfg_hs>,
