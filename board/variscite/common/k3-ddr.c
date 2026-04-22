@@ -7,6 +7,7 @@
 #include <fdt_support.h>
 #include <dm/uclass.h>
 #include <k3-ddrss.h>
+#include <mach/k3-ddr.h>
 #include <spl.h>
 
 #include "k3-ddr.h"
@@ -25,6 +26,13 @@ int dram_init(void)
 	else
 		/* Override fdtdec_setup_mem_size_base_lowest with memory size from EEPROM */
 		ret = var_dram_init_mem_size_base();
+
+	if (ret)
+		return ret;
+
+	ret = k3_mem_map_init();
+	if (ret)
+		printf("Error setting up MMU table. %d\n", ret);
 
 	return ret;
 }
