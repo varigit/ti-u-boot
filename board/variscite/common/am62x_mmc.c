@@ -29,8 +29,13 @@ int mmc_get_env_dev(void) {
 		mmc_dev = 0; /* eMMC */
 		break;
 	default:
+#ifdef CONFIG_SYS_MMC_ENV_DEV
 		printf("%s: Warning: Unknown boot device, defaulting to CONFIG_SYS_MMC_ENV_DEV\n", __func__);
 		mmc_dev = CONFIG_SYS_MMC_ENV_DEV;
+#else
+		printf("%s: Warning: Unknown boot device, defaulting to eMMC as mmc_dev\n", __func__);
+		mmc_dev = 0; /* eMMC */
+#endif
 		break;
 	}
 
