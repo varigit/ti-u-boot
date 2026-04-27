@@ -199,7 +199,8 @@ int board_late_init(void)
 			(int) (gd->ram_size / 1024 / 1024));
 	env_set("sdram_size", sdram_size_str);
 
-#ifdef CONFIG_ENV_IS_IN_MMC
+#ifdef CONFIG_MMC
+	/* set mmcblk variable to set boot medium */
 	board_late_mmc_env_init();
 #endif
 
