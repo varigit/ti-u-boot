@@ -14,12 +14,12 @@
 #include "am62x_eeprom.h"
 
 static int am6_boot_dev(void) {
-    int * boot_device = (int *) VAR_SCRATCH_BOOT_DEVICE;
-    return *boot_device;
+	int * boot_device = (int *) VAR_SCRATCH_BOOT_DEVICE;
+	return *boot_device;
 }
 
 int mmc_get_env_dev(void) {
-    int mmc_dev, boot_device = am6_boot_dev();
+	int mmc_dev, boot_device = am6_boot_dev();
 
 	switch(boot_device) {
 	case BOOT_DEVICE_MMC2:
@@ -29,12 +29,12 @@ int mmc_get_env_dev(void) {
 		mmc_dev = 0; /* eMMC */
 		break;
 	default:
-        printf("%s: Warning: Unknown boot device, defaulting to CONFIG_SYS_MMC_ENV_DEV\n", __func__);
+		printf("%s: Warning: Unknown boot device, defaulting to CONFIG_SYS_MMC_ENV_DEV\n", __func__);
 		mmc_dev = CONFIG_SYS_MMC_ENV_DEV;
 		break;
 	}
 
-    return mmc_dev;
+	return mmc_dev;
 }
 
 /* This should be defined for each board */
@@ -45,10 +45,10 @@ __weak int mmc_map_to_kernel_blk(int dev_no)
 
 void board_late_mmc_env_init(void)
 {
-    char cmd[32];
-    int dev_no = mmc_get_env_dev();
+	char cmd[32];
+	int dev_no = mmc_get_env_dev();
 
-    env_set_ulong("mmcdev", dev_no);
+	env_set_ulong("mmcdev", dev_no);
 
 	/* Set mmcblk env */
 	env_set_ulong("mmcblk", mmc_map_to_kernel_blk(dev_no));
