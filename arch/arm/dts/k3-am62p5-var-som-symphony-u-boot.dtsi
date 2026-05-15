@@ -64,6 +64,31 @@
 	bootph-all;
 };
 
+/* Backlight off */
+&main_pmx0 {
+	bootph-all;
+
+	lvds_backlight_uboot_pins: lvds-backlight-uboot-pins {
+		pinctrl-single,pins = <
+			AM62PX_IOPAD(0x19c, PIN_OUTPUT, 7) /* (E24) GPIO_1_9 */
+		>;
+		bootph-all;
+	};
+};
+
+&main_gpio1 {
+	bootph-all;
+	pinctrl-names = "default";
+	pinctrl-0 = <&lvds_backlight_uboot_pins>;
+
+	lvds_backlight_hog {
+		bootph-all;
+		gpio-hog;
+		gpios = <9 0>;
+		output-low;
+		line-name = "lvds_backlight";
+	};
+};
 &main_i2c0 {
 	bootph-all;
 };
