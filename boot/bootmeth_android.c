@@ -29,6 +29,7 @@
 #define BCB_FIELD_COMMAND_SZ 32
 #define BCB_PART_NAME "misc"
 #define BOOT_PART_NAME "boot"
+#define INIT_BOOT_PART_NAME "init_boot"
 #define VENDOR_BOOT_PART_NAME "vendor_boot"
 #define SLOT_LEN 2
 
@@ -577,6 +578,20 @@ static int boot_android_normal(struct bootflow *bflow)
 			return log_msg_ret("read vendor_boot", ret);
 		set_avendor_bootimg_addr(vloadaddr);
 	}
+
+	if (priv->header_version >= 4) {
+		ulong iloadaddr = env_get_hex("init_boot_comp_addr_r", 0);
+
+		if (iloadaddr) {
+			ret = read_slotted_partition(desc, "init_boot",
+						     priv->slot, iloadaddr);
+			if (ret == 0)
+				set_ainit_bootimg_addr(iloadaddr);
+			else
+				log_debug("init_boot not loaded: %d\n", ret);
+		}
+	}
+
 	set_abootimg_addr(loadaddr);
 
 	ret = read_slotted_partition(desc, "dtbo", priv->slot, fdtoverlay_addr_r);
