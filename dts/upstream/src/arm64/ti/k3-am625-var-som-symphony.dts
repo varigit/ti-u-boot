@@ -97,6 +97,8 @@
 &cpsw3g_mdio {
 	cpsw3g_phy1: ethernet-phy@5 {
 		reg = <5>;
+		compatible = "ethernet-phy-ieee802.3-c22";
+		ti,min-output-impedance;
 	};
 };
 
