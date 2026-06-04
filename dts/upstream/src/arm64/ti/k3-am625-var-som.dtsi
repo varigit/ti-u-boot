@@ -3,7 +3,7 @@
  * dtsi for VAR-SOM-AM62 and derivatives
  *
  * Copyright (C) 2021-2022 Texas Instruments Incorporated - https://www.ti.com/
- * Copyright (C) 2023-2025 Variscite Ltd. - https://www.variscite.com/
+ * Copyright (C) 2023-2026 Variscite Ltd. - https://www.variscite.com/
  */
 
 /dts-v1/;
@@ -26,6 +26,7 @@
 	};
 
 	memory@80000000 {
+		bootph-pre-ram;
 		device_type = "memory";
 		/* 2G RAM */
 		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
@@ -101,11 +102,12 @@
 
 	vdd_phy_3v3: regulator-phy-vdd {
 		bootph-all;
+		pinctrl-names = "default";
+		pinctrl-0 = <&vdd_phy_3v3_pins_default>;
 		compatible = "regulator-fixed";
 		regulator-name = "vdd_phy_3v3";
 		gpio = <&main_gpio0 45 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
-		regulator-always-on;
 		status="okay";
 	};
 };
@@ -135,6 +137,7 @@
 
 &cpsw_port1 {
 	bootph-all;
+	phy-supply = <&vdd_phy_3v3>;
 	phy-reset-gpios = <&main_gpio0 46 GPIO_ACTIVE_LOW>;
 	phy-reset-duration = <10>;
 	phy-reset-post-delay = <20>;
@@ -209,7 +212,6 @@
 			AM62X_IOPAD(0x130, PIN_INPUT, 0) /* (AE19) RGMII1_TXC */
 			AM62X_IOPAD(0x12c, PIN_INPUT, 0) /* (AD19) RGMII1_TX_CTL */
 			AM62X_IOPAD(0x00bc, PIN_INPUT, 7) /* (V24) VOUT0_DATA1.GPIO0_46 */
-			AM62X_IOPAD(0x00b8, PIN_INPUT, 7) /* (U22) VOUT0_DATA0.GPIO0_45 */
 		>;
 	};
 
@@ -228,6 +230,12 @@
 			AM62X_IOPAD(0x178, PIN_INPUT, 0) /* (AC20) RGMII2_TD3 */
 			AM62X_IOPAD(0x168, PIN_INPUT_PULLDOWN, 0) /* (AE21) RGMII2_TXC */
 			AM62X_IOPAD(0x164, PIN_INPUT, 0) /* (AA19) RGMII2_TX_CTL */
+		>;
+	};
+
+	vdd_phy_3v3_pins_default: vdd-phy-3v3-default-pins {
+		pinctrl-single,pins = <
+			AM62X_IOPAD(0x00b8, PIN_OUTPUT, 7) /* (U22) VOUT0_DATA0.GPIO0_45 */
 		>;
 	};
 };

@@ -9,6 +9,7 @@
 #include <k3-ddrss.h>
 #include <mach/k3-ddr.h>
 #include <spl.h>
+#include <mach/k3-ddr.h>
 
 #include "k3-ddr.h"
 #include "am62x_eeprom.h"
@@ -21,8 +22,10 @@ int dram_init(void)
 	read_eeprom_header();
 
 	ret = fdtdec_setup_mem_size_base_lowest();
-	if (ret)
+	if (ret) {
 		printf("Error setting up mem size and base. %d\n", ret);
+		return ret;
+	}
 	else
 		/* Override fdtdec_setup_mem_size_base_lowest with memory size from EEPROM */
 		ret = var_dram_init_mem_size_base();
