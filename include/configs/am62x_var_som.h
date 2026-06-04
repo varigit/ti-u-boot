@@ -11,7 +11,6 @@
 #include <linux/sizes.h>
 
 #define DEFAULT_SDRAM_SIZE              SZ_512M
-#define CFG_MAX_MEM_MAPPED              0x80000000
 
 /**
  * define AM62X_VAR_SOM_TIBOOT3_IMAGE_GUID - firmware GUID for VAR-SOM-AM62 tiboot3.bin

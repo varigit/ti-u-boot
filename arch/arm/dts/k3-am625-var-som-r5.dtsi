@@ -2,11 +2,12 @@
 /*
  * dtsi file for R5 SPL for VAR-SOM-AM62 and derivatives
  * Copyright (C) 2021-2022 Texas Instruments Incorporated - https://www.ti.com/
- * Copyright (C) 2023-2025 Variscite Ltd. - https://www.variscite.com/
+ * Copyright (C) 2023-2026 Variscite Ltd. - https://www.variscite.com/
  */
 
 / {
 	aliases {
+		tick-timer = &main_timer0;
 		remoteproc0 = &sysctrler;
 		remoteproc1 = &a53_0;
 		serial0 = &wkup_uart0;
@@ -82,6 +83,14 @@
 &main_pktdma {
 	ti,sci = <&dm_tifs>;
 	bootph-all;
+};
+
+&main_timer0 {
+	/delete-property/ clocks;
+	/delete-property/ clocks-names;
+	/delete-property/ assigned-clocks;
+	/delete-property/ assigned-clock-parents;
+	clock-frequency = <25000000>;
 };
 
 &secure_proxy_sa3 {
