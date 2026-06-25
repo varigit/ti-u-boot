@@ -26,12 +26,16 @@ static int check_env(char *var, char *val)
 
 static void splash_set_source(void)
 {
+	int mmc_env_dev;
+
 	if (!check_env("splashsourceauto", "yes"))
 		return;
 
-	if (mmc_get_env_dev() == 0)
+	mmc_env_dev = mmc_get_env_dev();
+
+	if (mmc_env_dev == 0)
 		env_set("splashsource", "emmc");
-	else if (mmc_get_env_dev() == 1)
+	else if (mmc_env_dev == 1)
 		env_set("splashsource", "sd");
 }
 
