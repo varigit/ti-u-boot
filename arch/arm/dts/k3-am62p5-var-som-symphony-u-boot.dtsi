@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
- * Common AM62Px EVM dts file for SPLs
+ * Common VAR-SOM-AM62Px dts file for SPLs
  * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
- * Copyright (C) 2025 Variscite Ltd. - https://www.variscite.com/
+ * Copyright (C) 2025-2026 Variscite Ltd. - https://www.variscite.com/
  */
 
 #include "k3-am62p-var-som-symphony-binman.dtsi"
@@ -18,11 +18,15 @@
 	};
 };
 
-&ddr_pmctrl {
-	bootph-pre-ram;
+&dss0 {
+	compatible = "ti,am625-dss";
+	clocks = <&k3_clks 186 6>,
+		 <&k3_clks 186 0>,
+		 <&k3_clks 186 2>;
+	ti,am65x-oldi-io-ctrl = <&dss_oldi_io_ctrl>;
 };
 
-&canuart_wake {
+&wkup_r5fss0_core0_memory_region {
 	bootph-pre-ram;
 };
 
@@ -34,19 +38,50 @@
 	bootph-pre-ram;
 };
 
-&dss0 {
-	compatible = "ti,am625-dss";
-	clocks = <&k3_clks 186 6>,
-		 <&k3_clks 186 0>,
-		 <&k3_clks 186 2>;
-	ti,am65x-oldi-io-ctrl = <&dss_oldi_io_ctrl>;
+/* Required for USB DFU Boot */
+&usb0_phy_ctrl {
+	bootph-all;
+};
+
+&usb0 {
+	bootph-all;
+};
+
+&ddr_pmctrl {
+	bootph-pre-ram;
+};
+
+&canuart_wake {
+	bootph-pre-ram;
+};
+
+&wkup_r5fss0 {
+	bootph-pre-ram;
+};
+
+&wkup_r5fss0_core0 {
+	bootph-pre-ram;
 };
 
 &cpsw_mac_syscon {
 	bootph-all;
 };
 
-&cpsw3g_mdio {
+&cpsw_port1 {
+	/* Variscite MAC addresses assigned by EEPROM/env */
+	/delete-property/ ti,syscon-efuse;
+	bootph-all;
+};
+
+&main_pktdma {
+	bootph-all;
+};
+
+&main_rgmii1_pins_default {
+	bootph-all;
+};
+
+&main_mdio1_pins_default {
 	bootph-all;
 };
 
@@ -54,9 +89,11 @@
 	bootph-all;
 };
 
-&cpsw_port1 {
-	/* Variscite MAC addresses assigned by EEPROM/env */
-	/delete-property/ ti,syscon-efuse;
+&cpsw3g_mdio {
+	bootph-all;
+};
+
+&phy_gmii_sel {
 	bootph-all;
 };
 
@@ -80,13 +117,13 @@
 	bootph-all;
 };
 
+/* Keep all I2C interfaces enabled through all boot phases.
+   This way we can ensure that I2C3 with EEPROM access will always be I2C3
+*/
 &main_i2c2 {
 	bootph-all;
 };
 
-&main_i2c2_pins_default {
-	bootph-all;
-};
 
 &main_i2c3 {
 	/delete-property/ power-domains;
@@ -109,32 +146,6 @@
 	bootph-all;
 };
 
-&phy_gmii_sel {
+
 	bootph-all;
-};
-
-&main_pktdma {
-	bootph-all;
-};
-
-/* Required for USB DFU Boot */
-&usb0 {
-	bootph-all;
-};
-
-/* Required for USB DFU Boot */
-&usb0_phy_ctrl {
-	bootph-all;
-};
-
-&wkup_r5fss0 {
-	bootph-pre-ram;
-};
-
-&wkup_r5fss0_core0 {
-	bootph-pre-ram;
-};
-
-&wkup_r5fss0_core0_memory_region {
-	bootph-pre-ram;
 };
