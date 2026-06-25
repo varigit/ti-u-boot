@@ -2,11 +2,12 @@
 /*
  * AM62P5 SK dts file for R5 SPL
  * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
- * Copyright (C) 2025 Variscite Ltd. - https://www.variscite.com/
+ * Copyright (C) 2025-2026 Variscite Ltd. - https://www.variscite.com/
  */
 
 / {
 	aliases {
+		tick-timer = &main_timer0;
 		remoteproc0 = &sysctrler;
 		remoteproc1 = &a53_0;
 		serial0 = &wkup_uart0;
@@ -85,6 +86,15 @@
 		mbox-names = "tx", "rx", "boot_notify";
 		bootph-all;
 	};
+};
+
+&main_timer0 {
+	/delete-property/ clocks;
+	/delete-property/ clock-names;
+	/delete-property/ assigned-clocks;
+	/delete-property/ assigned-clock-parents;
+	clock-frequency = <25000000>;
+	bootph-pre-ram;
 };
 
 &main_pktdma {
