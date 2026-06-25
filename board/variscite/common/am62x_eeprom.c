@@ -11,6 +11,7 @@
 #include <cpu_func.h>
 #include <u-boot/crc.h>
 #include <asm/arch/hardware.h>
+#include <fdt_support.h>
 
 #include "am62x_eeprom.h"
 
@@ -480,5 +481,83 @@ int var_carrier_eeprom_is_valid(struct var_carrier_eeprom *ep)
 	}
 
 	return 1;
+}
+#endif
+
+#if defined(CONFIG_OF_BOARD_SETUP)
+static int add_prop(void *fdt, const char *propname, const void *data, size_t len)
+{
+	int ret;
+
+	ret = fdt_find_and_setprop(fdt, "/", propname, data, len, 1);
+	if (ret)
+		printf("Cannot update Device Tree node /%s: %d\n", propname, ret);
+
+	return ret;
+}
+
+static int month_to_dec(char *month)
+{
+	const char *months[] = {"Jan", "Feb", "Mar", "Apr", "May", "Jun",
+			      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
+
+	int i;
+	for (i = 0; i != ARRAY_SIZE(months); i++)
+		if (!strncmp(month, months[i], strlen(months[i])))
+			return i+1;	// Jan is first month, but has idx 0, so +1
+
+	return -1;	/* unknown month */
+}
+
+void var_eeprom_data_fix_fdt(void *fdt, struct var_eeprom *ep)
+{
+#define MAC_SIZE_STR (sizeof(ep->mac) * 3)
+	u8 buffer[64];
+	u8 partnum[sizeof(ep->partnum) + sizeof(ep->partnum2)];
+	int dram_size;
+
+	if (!var_eeprom_is_valid(ep))
+		return;
+
+	/* There is no need to explicitly increase FTD size.
+	 * During relocation we already get an extra CONFIG_SYS_FDT_PAD bytes */
+
+	/* serial number is MAC in typical MAC string notation */
+	snprintf(buffer, sizeof(buffer), "%02x:%02x:%02x:%02x:%02x:%02x",
+		 ep->mac[0], ep->mac[1], ep->mac[2], ep->mac[3], ep->mac[4], ep->mac[5]);
+	add_prop(fdt, "serial-number", buffer, MAC_SIZE_STR);
+
+	/* partnum is split in EEPROM, put it together */
+	memcpy(partnum, ep->partnum, sizeof(ep->partnum));
+	memcpy(partnum + sizeof(ep->partnum), ep->partnum2, sizeof(ep->partnum2));
+#if defined(CONFIG_SOC_K3_AM625)
+	snprintf(buffer, sizeof(buffer), "VSM-AM62-%.*s",(int)sizeof(partnum), partnum);
+#else
+	snprintf(buffer, sizeof(buffer), "VSM-AM62P-%.*s",(int)sizeof(partnum), partnum);
+#endif
+	add_prop(fdt, "variscite,part-number", buffer, strlen(buffer)+1);
+
+	/* Assembly */
+	snprintf(buffer, sizeof(buffer), "AS%.*s", (int) sizeof(ep->assembly), (char *)ep->assembly);
+	add_prop(fdt, "variscite,assembly-number", buffer, strlen(buffer)+1);
+
+	/* Production Date */
+	snprintf(buffer, sizeof(buffer), "%.*s-%02d-%.*s",
+			4, (char *) ep->date,			/* YYYY */
+			month_to_dec(((char *) ep->date) + 4),	/* MM   */
+			2, ((char *) ep->date) + 4 + 3);	/* DD   */
+	add_prop(fdt, "variscite,production-date", buffer, strlen(buffer)+1);
+
+	/* SOM Revision */
+	snprintf(buffer, sizeof(buffer), "%ld.%ld", SOMREV_MAJOR(ep->somrev),
+		 SOMREV_MINOR(ep->somrev));
+	add_prop(fdt, "variscite,som-revision", buffer, strlen(buffer)+1);
+
+	dram_size = ep->dramsize * 128UL;
+	dram_size = cpu_to_fdt32(dram_size);
+	add_prop(fdt, "variscite,ram-size-mib", &dram_size, sizeof(dram_size));
+
+	add_prop(fdt, "variscite,eeprom-version", &ep->version ,sizeof(ep->version));
+	add_prop(fdt, "variscite,som-features", &ep->features, sizeof(ep->features));
 }
 #endif

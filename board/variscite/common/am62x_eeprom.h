@@ -97,5 +97,5 @@ void var_eeprom_print_prod_info(struct var_eeprom *e);
 int var_carrier_eeprom_read(int bus, int addr, struct var_carrier_eeprom *ep);
 int var_carrier_eeprom_is_valid(struct var_carrier_eeprom *ep);
 void var_carrier_eeprom_get_revision(struct var_carrier_eeprom *ep, char *rev, size_t size);
-
-#endif /* _MX8M_VAR_EEPROM_H_ */
+void var_eeprom_data_fix_fdt(void *blob, struct var_eeprom *ep);
+#endif /* _AM62X_VAR_EEPROM_H_ */

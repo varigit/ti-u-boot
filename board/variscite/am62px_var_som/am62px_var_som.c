@@ -178,6 +178,9 @@ void spl_board_init(void)
 int ft_board_setup(void *blob, struct bd_info *bd)
 {
 	int ret = -1;
+	struct var_eeprom *ep = VAR_EEPROM_DATA;
+
+	var_eeprom_data_fix_fdt(blob, ep);
 
 	if (IS_ENABLED(CONFIG_FDT_SIMPLEFB))
 		ret = fdt_simplefb_enable_and_mem_rsv(blob);
