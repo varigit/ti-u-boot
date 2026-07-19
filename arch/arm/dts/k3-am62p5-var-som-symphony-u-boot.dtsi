@@ -90,6 +90,14 @@
 
 &usb0 {
 	bootph-all;
+	dr_mode = "peripheral";
+
+	/delete-property/ usb-role-switch;
+	/delete-node/ port;
+};
+
+&usbss0 {
+	/delete-node/ connector;
 };
 
 &ddr_pmctrl {
