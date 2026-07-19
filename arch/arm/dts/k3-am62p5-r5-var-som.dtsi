@@ -10,9 +10,8 @@
 		tick-timer = &main_timer0;
 		remoteproc0 = &sysctrler;
 		remoteproc1 = &a53_0;
-		serial0 = &wkup_uart0;
-		serial2 = &main_uart0;
-		serial3 = &main_uart1;
+		serial0 = &main_uart0;
+		serial1 = &main_uart1;
 	};
 
 	a53_0: a53@0 {
