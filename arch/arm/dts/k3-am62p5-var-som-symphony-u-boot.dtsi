@@ -16,6 +16,51 @@
 	reserved-memory {
 		bootph-pre-ram;
 	};
+
+	backlight_lcd: backlight-lcd {
+		compatible = "gpio-backlight";
+		pinctrl-names = "default";
+		pinctrl-0 = <&lcd_backlight_pins_default>;
+		gpios = <&main_gpio1 9 GPIO_ACTIVE_HIGH>;
+		default-on;
+		bootph-all;
+	};
+
+	display {
+		bootph-pre-ram;
+		compatible = "simple-panel";
+		backlight = <&backlight_lcd>;
+		width-mm = <153>;
+		height-mm = <87>;
+		label = "gktw70sdae4se";
+		data-mapping = "jeida-24";
+		status = "okay";
+
+		panel-timing {
+			bootph-pre-ram;
+			clock-frequency = <30000>;
+			hactive = <800>;
+			vactive = <480>;
+			hback-porch = <40>;
+			hfront-porch = <40>;
+			vback-porch = <29>;
+			vfront-porch = <13>;
+			hsync-len = <48>;
+			vsync-len = <3>;
+			hsync-active = <0>;
+			vsync-active = <0>;
+			de-active = <1>;
+
+			/* unlike most panels this panel expects pixelclk-active = <1> */
+			pixelclk-active = <1>;
+		};
+
+		port@0 {
+			lcd_in0: endpoint {
+				remote-endpoint = <&oldi0_dss0_out>;
+			};
+		};
+	};
 };
 
 &dss0 {
@@ -147,5 +192,12 @@
 };
 
 
+&main_pmx0  {
 	bootph-all;
+	lcd_backlight_pins_default: lcd-backlight-pins-default {
+		pinctrl-single,pins = <
+			AM62PX_IOPAD(0x19c, PIN_INPUT_PULLUP, 7) /* (E24) GPIO_1_9 */
+		>;
+		bootph-all;
+	};
 };
