@@ -1,0 +1,25 @@
+// SPDX-License-Identifier: GPL-2.0
+/*
+ * AM62P5-VAR-SOM-SYMPHONY dts file for R5 SPL
+ * Copyright (C) 2026 Variscite Ltd. - https://www.variscite.com/
+ */
+
+&pca9534 {
+	u-boot,dm-pre-reloc;
+	/*
+	 * Release the Ethernet PHY from reset before PHY discovery.
+	 *
+	 * The generic Clause 22 PHY compatible requires U-Boot to read
+	 * the PHY ID registers over MDIO for identification. These
+	 * registers are not accessible while the PHY is held in reset.
+	 *
+	 * Use a GPIO hog during R5 SPL to release reset early.
+	 */
+	eth_phy_reset {
+		gpio-hog;
+		gpios = <5 0>;
+		output-high;
+		line-name = "eth-phy-reset";
+		u-boot,dm-pre-reloc;
+	};
+};

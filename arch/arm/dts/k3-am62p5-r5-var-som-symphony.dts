@@ -9,3 +9,5 @@
 #ifdef CONFIG_TARGET_AM62P5_R5_VAR_SOM
 #include "var-som-hs-fs-binman.dtsi"
 #endif
+
+#include "k3-am62p5-r5-var-som-symphony-common.dtsi"

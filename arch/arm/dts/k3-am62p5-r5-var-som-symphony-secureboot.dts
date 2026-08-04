@@ -17,3 +17,5 @@
 &hs_fs_bin {
 	filename = "tiboot3-am62px-hs-fs-am62px-var-som-secureboot.bin";
 };
+
+#include "k3-am62p5-r5-var-som-symphony-common.dtsi"
