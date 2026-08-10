@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
- * AM62P5 SK dts file for R5 SPL
+ * VAR-SOM-AM62P SYMPHONY dts file for R5 SPL
  * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
  * Copyright (C) 2025 Variscite Ltd. - https://www.variscite.com/
  */

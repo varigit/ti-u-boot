@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-2.0
 /*
- * Common VAR-SOM-AM62Px dts file for SPLs
+ * Common VAR-SOM-AM62P SYMPHONY dts file for SPLs
  * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
  * Copyright (C) 2025-2026 Variscite Ltd. - https://www.variscite.com/
  */
